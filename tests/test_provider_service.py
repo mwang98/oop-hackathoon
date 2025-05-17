@@ -30,4 +30,3 @@ async def test_get_location_from_zip_valid():
 
 if __name__ == "__main__":
     asyncio.run(test_get_location_from_zip_valid())
-    # Skip the error tests when running directly
