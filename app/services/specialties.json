@@ -1,0 +1,722 @@
+[
+   {
+     "id": "57446549-2602-4a32-9095-64f957b203e0",
+     "specialtyName": "Emergency medicine",
+     "specialtyId": "93",
+     "description": "Emergency medicine specialists take care of patients with critical illnesses or injuries.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "83dcb520-1fb2-4e51-840d-f0bed83cf474",
+     "specialtyName": "General surgery",
+     "specialtyId": "02",
+     "description": "General surgeons take care of patients who may need surgery.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "db52f057-0f86-4805-bc7c-6f4695d54417",
+     "specialtyName": "Vascular surgery",
+     "specialtyId": "77",
+     "description": "Vascular surgeons treat diseases of the circulatory system, other than the brain and heart.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "c7bd9fab-db62-4692-81c6-937c5894a4f4",
+     "specialtyName": "Dermatology",
+     "specialtyId": "07",
+     "description": "Dermatologists treat skin conditions.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "8834505d-57b1-453f-b45e-44f2ba94bd56",
+     "specialtyName": "Internal medicine",
+     "specialtyId": "11",
+     "description": "Internists treat diseases of the internal organs that don\u2019t require surgery. They also provide primary care for teenagers, adults, and elderly people.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "c436c679-12ca-4390-b3d6-d6fd42254547",
+     "specialtyName": "Hospice/palliative care",
+     "specialtyId": "17",
+     "description": "Hospice and palliative care physicians manage pain and other distressing symptoms of serious illnesses. 'Hospice care' is palliative care for patients who are expected to have 6 months or less to live.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "bb3a7a8e-ed50-43f3-ad00-5a47ad6becb3",
+     "specialtyName": "Hospitalist",
+     "specialtyId": "C6",
+     "description": "Hospitalists are physicians who provide general medical care to hospitalized patients.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "4390226d-3cd5-40e0-ada7-b6709cd48c75",
+     "specialtyName": "Neurology",
+     "specialtyId": "13",
+     "description": "Neurologists treat diseases of the brain, spinal cord, and nerves.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "bf3d1f95-16a9-445d-a76f-5acfebd68759",
+     "specialtyName": "Rheumatology",
+     "specialtyId": "66",
+     "description": "Rheumatologists treat problems involving the joints, muscles, bones, and tendons.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "3263df36-f14c-4910-af16-a061e4841a67",
+     "specialtyName": "Anesthesiology",
+     "specialtyId": "05",
+     "description": "Anesthesiologists provide anesthesia for patients who are having surgery or other procedures. They also treat pain and care for patients with critical illnesses or severe injuries.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "edf384ff-a2b8-481b-9c5d-235184bf4df5",
+     "specialtyName": "Certified registered nurse anesthetist (CRNA)",
+     "specialtyId": "43",
+     "description": "Certified registered nurse anesthetists (CRNA) are registered nurses who have earned a master's degree in nursing and met other requirements. They provide anesthesia, and work with other clinicians.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "ff955d4e-2569-47dc-9903-32397d948d23",
+     "specialtyName": "General practice",
+     "specialtyId": "01",
+     "description": "General practitioners provide primary care. They treat illnesses, provide preventive care, and coordinate the care provided by other clinicians.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "e8264541-ab64-4e02-9723-6d0362434976",
+     "specialtyName": "Orthopedic surgery",
+     "specialtyId": "20",
+     "description": "Orthopedic surgeons treat diseases, injuries, and deformities of the bones and muscles.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "4e694898-281f-4687-a269-b7784f8143dd",
+     "specialtyName": "Physical therapist in private practice",
+     "specialtyId": "65",
+     "description": null,
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "5fe4777c-62eb-4228-9538-534ebe09f1b5",
+     "specialtyName": "Nurse practitioner",
+     "specialtyId": "50",
+     "description": "Nurse practitioners (NP) are registered nurses who have earned a master's degree in nursing and met other requirements. They provide primary and preventive care, prescribe medicines, and treat common minor illnesses and injuries.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "a5b4935d-499f-4a60-8979-e7921345a92d",
+     "specialtyName": "Psychiatry",
+     "specialtyId": "26",
+     "description": "Psychiatrists treat mental, addictive, and emotional disorders.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "67edded9-be43-4867-a283-fa5ab8814c9d",
+     "specialtyName": "Nephrology",
+     "specialtyId": "39",
+     "description": "Nephrologists treat disorders of the kidneys.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "fe2f963a-4552-4149-91e1-2385e9b859b3",
+     "specialtyName": "Sports medicine",
+     "specialtyId": "23",
+     "description": "Sports medicine specialists treat problems related to participation in sports or exercise.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "90cb5b7a-df05-4abe-a103-9eb8cf467973",
+     "specialtyName": "Diagnostic radiology",
+     "specialtyId": "30",
+     "description": "Diagnostic radiologists use imaging, like x-rays or ultrasound, to diagnose diseases.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "f78d73fc-ddbf-449c-93ec-4ec08ced2456",
+     "specialtyName": "Family practice",
+     "specialtyId": null,
+     "description": "Family medicine practitioners provide primary care for people of all ages. They treat illnesses, provide preventive care, and coordinate the care provided by other health clinicians.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "2d0c0042-d573-441d-b357-eeb29e4067be",
+     "specialtyName": "Micrographic dermatologic surgery (MDS)",
+     "specialtyId": "D7",
+     "description": "Micrographic dermatologic surgeons treat patients with high-risk and complex skin cancer by performing a procedure to remove cancer-containing tissue until only cancer-free tissue remains. ",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "6fd76e7d-2650-4395-9012-22faae2f5693",
+     "specialtyName": "Pediatric medicine",
+     "specialtyId": "37",
+     "description": "Pediatricians provide primary care for infants, children, and teenagers.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "6e669c26-5198-461a-a231-a9d7a940e468",
+     "specialtyName": "Obstetrics/gynecology",
+     "specialtyId": "16",
+     "description": "Obstetricians and gynecologists take care of women during pregnancy and childbirth (called obstetrics). They also treat disorders of the female reproductive system (called gynecology).",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "762ef77c-b1fc-4b02-bb54-96870a22f149",
+     "specialtyName": "Other",
+     "specialtyId": null,
+     "description": null,
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "b00e92ca-aa9e-4251-9fb3-3e401541118f",
+     "specialtyName": "Otolaryngology",
+     "specialtyId": "04",
+     "description": "Otolaryngologists treat conditions of the ears, nose, and throat (ENT) and related areas of the head and neck.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "ac44bdb3-777e-41d2-81aa-77316101aee3",
+     "specialtyName": "Clinical social worker",
+     "specialtyId": "80",
+     "description": "Clinical social workers (CSW) have earned a master\u2019s degree, and help people deal with life changes and challenges, including mental disorders.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "d99e2b7e-ed43-4cf0-94d5-598062e4bd77",
+     "specialtyName": "Clinical psychologist",
+     "specialtyId": "QQ",
+     "description": "Clinical psychologists have a doctorate in psychology and have advanced training in promoting mental health and helping people cope with problems.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "043e86c4-7146-4086-99a8-3388d35e5c88",
+     "specialtyName": "Pathology",
+     "specialtyId": "22",
+     "description": "Pathologists examine body tissues and interpret laboratory test results.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "f88651f6-9dda-4b54-a332-33c5e6e854ee",
+     "specialtyName": "Physician assistant",
+     "specialtyId": "97",
+     "description": "Physician assistants (PA) are graduates of accredited PA educational programs. They\u2019re licensed to practice medicine with a physician\u2019s supervision. They examine patients, diagnose and treat illnesses, order lab tests, prescribe medicines, perform procedures, assist in surgery, and counsel patients.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "c207700b-406a-4a8f-b6b1-675f837389bf",
+     "specialtyName": "Chiropractic",
+     "specialtyId": "35",
+     "description": "Chiropractors adjust specific parts of the body (often the spine) to prevent and treat diseases.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "c413864a-2dbe-46d0-8c92-57094dc5311c",
+     "specialtyName": "Podiatry",
+     "specialtyId": "48",
+     "description": "Podiatrists specialize in caring for the foot and treating foot diseases.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "26951f98-3bde-4de5-a68d-9fb007d176d9",
+     "specialtyName": "Cardiovascular disease (cardiology)",
+     "specialtyId": "06",
+     "description": "Cardiologists treat diseases of the heart and blood vessels.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "79b92f1b-f7d5-4721-a3b6-49304812af68",
+     "specialtyName": "Medical oncology",
+     "specialtyId": "90",
+     "description": "Medical oncologists treat cancer with chemotherapy, hormonal therapy, biological therapy, and targeted therapy. They may also coordinate cancer care given by other specialists.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "952aec26-040c-46a5-baa6-a94a72a243d0",
+     "specialtyName": "Hematology/oncology",
+     "specialtyId": "83",
+     "description": "Hematologists treat diseases of the blood, spleen, and lymph. Examples include anemia, sickle cell disease, hemophilia, and leukemia. Oncologists treat cancer with chemotherapy, hormonal therapy, biological therapy, and targeted therapy. They may also coordinate cancer care given by other specialists.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "5eec1a9d-5288-44e3-be34-3682613dcb7d",
+     "specialtyName": "Radiation oncology",
+     "specialtyId": "92",
+     "description": "Radiation oncologists use radiation to treat cancer.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "1f437bb4-7fe5-47be-b55b-8bf2e73d16a0",
+     "specialtyName": "Gastroenterology",
+     "specialtyId": "10",
+     "description": "Gastroenterologists treat diseases of the digestive organs, including the stomach, bowels, liver, and gallbladder.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "29285505-00ef-4120-9c13-2dc67cf8b30c",
+     "specialtyName": "Pulmonary disease",
+     "specialtyId": "29",
+     "description": "Pulmonologists treat diseases of the lungs and airways.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "7d02cb4a-e39a-4dd9-87ac-6433b3fd00cd",
+     "specialtyName": "Sleep medicine",
+     "specialtyId": "C0",
+     "description": "Sleep medicine physicians treat problems related to sleep or the sleep-wake cycle.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "f7de8721-f12e-4de8-bd10-9798850828bf",
+     "specialtyName": "Critical care (intensivists)",
+     "specialtyId": "81",
+     "description": "Intensivists treat critically ill or injured patients.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "af2624bd-be9b-4da1-b8be-86f4e4a3d6dc",
+     "specialtyName": "Optometry",
+     "specialtyId": "41",
+     "description": "Optometrists are eye care professionals who perform eye examinations, prescribe corrective lenses, and treat some eye diseases that don\u2019t require surgery.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "4a85e5c1-9285-4c58-b426-c374b036fd8e",
+     "specialtyName": "Physical medicine and rehabilitation",
+     "specialtyId": "25",
+     "description": "Physical medicine and rehabilitation specialists are physicians who treat patients with short-term or long-term disabilities.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "0bc0c534-4f64-49a5-831b-92420cf9774a",
+     "specialtyName": "Pain management",
+     "specialtyId": "72",
+     "description": "Pain management specialists take care of patients with pain.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "78822b64-c3c6-4418-b5e6-c3a5b62cbf25",
+     "specialtyName": "Endocrinology",
+     "specialtyId": "46",
+     "description": "Endocrinologists treat diseases that involve the internal (endocrine) glands. Examples include diabetes and diseases of the thyroid, pituitary, or adrenal glands.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "cf8a25cd-63cc-4bf2-8279-c69a70298f4d",
+     "specialtyName": "Ophthalmology",
+     "specialtyId": "18",
+     "description": "Ophthalmologists are physicians who specialize in the care of the eyes. They prescribe glasses and contact lenses, diagnose and treat eye conditions, and perform eye surgery.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "eb6d6a71-e1c8-46ce-be42-03015a51a9f8",
+     "specialtyName": "Hematology",
+     "specialtyId": "82",
+     "description": "Hematologists treat diseases of the blood, spleen, and lymph. Examples include anemia, sickle cell disease, hemophilia, and leukemia.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "1782d00f-2a53-4264-bf21-376941961247",
+     "specialtyName": "Qualified audiologist",
+     "specialtyId": "64",
+     "description": "Audiologists have advanced training and evaluate hearing or balance problems. They provide hearing aids and counsel people about how to cope with hearing loss.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "31d36866-ae2d-47f2-89e2-4e9f4ac64410",
+     "specialtyName": "Colorectal surgery (proctology)",
+     "specialtyId": "28",
+     "description": "Colorectal surgeons treat diseases of the lower digestive tract.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "b939a596-0e7d-4408-bdd1-4e6d965e8493",
+     "specialtyName": "Surgical oncology",
+     "specialtyId": "91",
+     "description": "Surgical oncologists specialize in the surgical diagnosis and treatment of cancer.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "a05cf670-1fa9-4a39-a426-1bed37c13ca3",
+     "specialtyName": "Mental health counselor",
+     "specialtyId": null,
+     "description": "Mental health counselors have professional training to help people manage their mental health conditions and learn to cope with life issues.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "ceea66e6-e744-4dff-8e9c-36b3e4e98be0",
+     "specialtyName": "Marriage and family therapist",
+     "specialtyId": null,
+     "description": "Marriage and family therapists have professional training to help people cope with problems in their relationships.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "2e36c924-717d-4b96-9553-323b8d12c70f",
+     "specialtyName": "Geriatric psychiatry",
+     "specialtyId": "27",
+     "description": "Geriatric psychiatrists treat mental and emotional disorders in elderly people.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "8436b2a3-0430-475f-9d31-f1912b8ea73f",
+     "specialtyName": "Infectious disease",
+     "specialtyId": "44",
+     "description": "Infectious disease physicians treat patients with all types of infectious diseases.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "eef3ee80-ebdc-4183-9e01-055039a766df",
+     "specialtyName": "Nuclear medicine",
+     "specialtyId": "36",
+     "description": "Nuclear medicine specialists use radioactive materials to diagnose and treat diseases.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "096ad493-cc4c-41a1-888d-c4fe60b4d5df",
+     "specialtyName": "Neuropsychiatry",
+     "specialtyId": "86",
+     "description": "Neuropsychiatrists treat patients with behavioral disturbances related to nervous system problems.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "3559fda9-7e99-49cd-b918-0fcc3be75171",
+     "specialtyName": "Plastic and reconstructive surgery",
+     "specialtyId": "24",
+     "description": "Plastic and reconstructive surgeons perform procedures to improve the appearance or function of parts of the body.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "1e37a84e-a3ac-4281-b38f-eab26316f410",
+     "specialtyName": "Certified clinical nurse specialist (CNS)",
+     "specialtyId": "89",
+     "description": "Clinical nurse specialists (CNS) are registered nurses who have earned a master's degree in nursing and met other requirements. They handle a range of physical and mental health problems.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "29506a0c-9123-4d65-912e-0c12ba646da7",
+     "specialtyName": "Interventional pain management",
+     "specialtyId": "09",
+     "description": "Interventional pain management specialists use special procedures to treat and manage pain. For example, they may use cryoablation (a procedure involving extreme cold) to stop a nerve from working for a long period of time.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "b79c1c87-0ce0-4458-a038-fb0169b6849a",
+     "specialtyName": "Interventional radiology",
+     "specialtyId": "94",
+     "description": "Interventional radiologists perform procedures guided by various types of imaging. For example, they may use imaging to find a clogged spot in an artery and to guide a procedure to unclog it.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "3eddcd9f-9ad5-46ba-9bfe-ceb9597ed875",
+     "specialtyName": "Neurosurgery",
+     "specialtyId": "14",
+     "description": "Neurosurgeons perform surgery to treat problems in the brain, spine, and nerves.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "456d52ca-b63f-4034-aec0-1d2b60cb5312",
+     "specialtyName": "Hand surgery",
+     "specialtyId": "40",
+     "description": "Hand surgeons perform surgery for patients with problems that affect the hand, wrist, or forearm.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "a622fd9a-d812-4e5a-bcf7-54b6c98a55b2",
+     "specialtyName": "Urology",
+     "specialtyId": "34",
+     "description": "Urologists treat problems in the male and female urinary tract and the male reproductive system.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "9d647620-a0fd-46d4-9562-e67f08ddefde",
+     "specialtyName": "Cardiac electrophysiology",
+     "specialtyId": "21",
+     "description": "Cardiac electrophysiologists use technical procedures to evaluate heart rhythms.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "1b044c1c-9264-4d8c-b21e-eed41e7590e9",
+     "specialtyName": "Interventional cardiology",
+     "specialtyId": "C3",
+     "description": "Interventional cardiologists are heart and circulatory system specialists who use minimally invasive catheterization techniques to diagnose and treat coronary arteries, the peripheral vascular system, heart valves, and congenital heart defects.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "9216b3e2-a9ab-4980-ba24-46d895b2412f",
+     "specialtyName": "Hematopoietic cell transplantation and cellular therapy",
+     "specialtyId": "C9",
+     "description": "Hematopoietic cell transplantation and cellular therapy specialists provide immune system treatment for patients with leukemia or other blood or bone marrow diseases.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "03c1137f-32e6-42af-8136-addddf27101b",
+     "specialtyName": "Geriatric medicine",
+     "specialtyId": "38",
+     "description": "Geriatricians provide primary care for elderly patients.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "8bd5b1df-4c5d-4877-a9f1-5fb6f2e59140",
+     "specialtyName": "Certified nurse midwife (CNM)",
+     "specialtyId": "42",
+     "description": "Certified nurse midwives (CNM) are registered nurses who have earned a master's degree in nursing and met other requirements. They practice in hospitals and medical clinics. They may also deliver babies in birthing centers and attend home births.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "2d00cdbd-f8ac-4b5a-a7f2-b9fb794603c2",
+     "specialtyName": "Addiction medicine",
+     "specialtyId": "79",
+     "description": "Specialists in addiction medicine treat substance abuse and addiction.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "a8e20b08-2084-4d04-9af6-45f037a75809",
+     "specialtyName": "Occupational therapist in private practice",
+     "specialtyId": "67",
+     "description": null,
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "1e238418-7a84-4d78-bd71-2ca9c9a81204",
+     "specialtyName": "Epileptologists",
+     "specialtyId": null,
+     "description": null,
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": false
+     }
+   },
+   {
+     "id": "6bab1b43-7384-4b9f-b858-bc71cfc21445",
+     "specialtyName": "Thoracic surgery",
+     "specialtyId": "33",
+     "description": "Thoracic surgeons treat problems in the chest, including problems affecting the heart, lungs, or windpipe. This is related to cardiac surgery.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "710afb50-d362-4c9a-8965-0c1504c31777",
+     "specialtyName": "Cardiac surgery",
+     "specialtyId": "78",
+     "description": "Cardiac surgeons treat problems in the chest, including problems affecting the heart, lungs, or windpipe. This is related to thoracic surgery.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   },
+   {
+     "id": "b31f1398-4a3d-4caf-a9ae-848db497a0f9",
+     "specialtyName": "Gynecological oncology",
+     "specialtyId": "98",
+     "description": "Gynecological oncologists treat cancers of the female reproductive organs.",
+     "exclude": false,
+     "physicianSpecialty": {
+       "isPrimary": true
+     }
+   }
+ ]
