@@ -15,6 +15,50 @@ from app.models.schemas import (
     ProviderConfirmationInfo,
 )
 import requests
+import openai
+from app.models.schemas import Location, ProviderInfo, ProviderSpecialty, ProviderConfirmationInfo
+
+
+# Load OpenAI API key from environment variable
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+
+def load_specialties() -> List[ProviderSpecialty]:
+    """
+    Load the list of available provider specialties.
+    
+    Returns:
+        List of ProviderSpecialty objects
+    """
+    # Check for specialties file in project directory first, then in Downloads
+    possible_paths = [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "specialties.json"),
+        os.path.expanduser("~/Downloads/specialties.json")
+    ]
+    
+    for path in possible_paths:
+        if os.path.exists(path):
+            with open(path, 'r') as f:
+                specialties_data = json.load(f)
+                
+            return [
+                ProviderSpecialty(
+                    id=specialty["id"],
+                    name=specialty["specialtyName"],
+                    description=specialty.get("description", None)
+                )
+                for specialty in specialties_data
+            ]
+    
+    # If no file found, return a default set of common specialties
+    # This is a fallback option and should be replaced with a proper database or file
+    return [
+        ProviderSpecialty(id="1", name="General Practice", description="Primary care for general health issues"),
+        ProviderSpecialty(id="2", name="Cardiology", description="Heart and cardiovascular system"),
+        ProviderSpecialty(id="3", name="Dermatology", description="Skin conditions"),
+        ProviderSpecialty(id="4", name="Orthopedics", description="Musculoskeletal system and injuries"),
+        ProviderSpecialty(id="5", name="Neurology", description="Brain and nervous system conditions")
+    ]
 
 
 # Load OpenAI API key from environment variable
@@ -132,8 +176,8 @@ def convert_raw_response_to_provider_info(raw_response: dict) -> List[ProviderIn
 
 async def map_symptoms_to_specialties(symptoms: List[str]) -> List[ProviderSpecialty]:
     """
-    Map patient symptoms to relevant provider specialties.
-
+    Map patient symptoms to relevant provider specialties using LLM.
+    
     Args:
         symptoms: List of patient symptoms
 
