@@ -2,6 +2,7 @@
 Provider finder service functions.
 """
 from typing import List, Dict, Optional
+import pgeocode
 from app.models.schemas import Location, ProviderInfo, ProviderSpecialty, ProviderConfirmationInfo
 
 
@@ -15,9 +16,24 @@ async def get_location_from_zip(zip_code: str) -> Location:
     Returns:
         Location with latitude and longitude
     """
-    # TODO: Implement zip code to lat/long conversion
-    # This could use an external geocoding API or a local database
-    pass
+    try:
+        # Create a US geocoder (assuming US zip codes)
+        nomi = pgeocode.Nominatim('us')
+        
+        # Query the geocoder with the zip code
+        result = nomi.query_postal_code(zip_code)
+        
+        # Extract latitude and longitude
+        latitude = float(result.latitude)
+        longitude = float(result.longitude)
+        
+        # Return a Location object with the coordinates
+        return Location(latitude=latitude, longitude=longitude)
+    except Exception as e:
+        # Handle errors (invalid zip code, service unavailable, etc.)
+        print(f"Error converting zip code to coordinates: {e}")
+        # Return a default location (or raise an exception depending on requirements)
+        raise ValueError(f"Could not determine location for zip code: {zip_code}")
 
 
 async def get_providers_by_location(location: Location, radius: float = 25.0) -> List[ProviderInfo]:
