@@ -135,7 +135,9 @@ class PatientInfo(BaseModel):
     date_of_birth: Optional[str] = Field(None, alias="dateOfBirth")
     policy_num: str = Field(..., alias="policyNum")
     insurance_company: str = Field(..., alias="insuranceCompany")
-    date_time_range: str = Field(..., alias="dateTimeRange")
+    date_time_range: str = Field(
+        ..., alias="dateTimeRange"
+    )  # Format "MM-DD HH:MM - HH:MM"
 
 
 class Request(BaseModel):

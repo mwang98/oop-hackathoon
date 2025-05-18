@@ -47,17 +47,19 @@ async def get_provider_recommendations(
         )
     confirmations = await asyncio.gather(
         *[
-            connect_providers_worker(provider_recommendation, request.patient_info)
-            for provider_recommendation in provider_recommendations
+            connect_providers_worker(idx, provider_recommendation, request.patient_info)
+            for idx, provider_recommendation in enumerate(provider_recommendations)
         ]
     )
     return confirmations
 
 
 async def connect_providers_worker(
-    recommendation: ProviderRecommendations, patientInfo: PatientInfo
+    idx: int, recommendation: ProviderRecommendations, patientInfo: PatientInfo
 ):
-    confirmations = await connect_providers(recommendation.provider_infos, patientInfo)
+    confirmations = await connect_providers(
+        idx, recommendation.provider_infos, patientInfo
+    )
     recommendation.provider_confirmation_infos = [
         confirmation[1] for confirmation in confirmations
     ]
