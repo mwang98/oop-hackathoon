@@ -13,13 +13,31 @@ class PromptGenerator:
         """
         self.specialties = self._get_specialty_list(specialties_file_path)
     
+<<<<<<< HEAD
     def create_specialty_matching_prompt(self, patient_description):
+=======
+<<<<<<< HEAD
+    def create_specialty_matching_prompt(self, patient_description):
+=======
+    def create_specialty_matching_prompt(self, symptom_description):
+>>>>>>> 5b1c811 (Implement map_symptoms_to_specialties)
+>>>>>>> ad550cb (Implement map_symptoms_to_specialties)
         """
         Create a prompt for the LLM to match a patient description to a specialty
         
         Args:
+<<<<<<< HEAD
             patient_description (str): Description of the patient's symptoms
             
+=======
+<<<<<<< HEAD
+            patient_description (str): Description of the patient's symptoms
+            
+=======
+            symptom_description (str): Description of the patient's symptoms
+
+>>>>>>> 5b1c811 (Implement map_symptoms_to_specialties)
+>>>>>>> ad550cb (Implement map_symptoms_to_specialties)
         Returns:
             str: A formatted prompt for the LLM
         """
@@ -31,14 +49,28 @@ class PromptGenerator:
 
         {self._format_specialties(self.specialties)}
 
+<<<<<<< HEAD
         PATIENT DESCRIPTION:
         {patient_description}
+=======
+<<<<<<< HEAD
+        PATIENT DESCRIPTION:
+        {patient_description}
+=======
+        SYMPTOM DESCRIPTION:
+        {symptom_description}
+>>>>>>> 5b1c811 (Implement map_symptoms_to_specialties)
+>>>>>>> ad550cb (Implement map_symptoms_to_specialties)
 
         TASK: Based on the patient's description, determine the most appropriate medical specialty from the list above. 
         Consider the symptoms, conditions, and affected body systems described by the patient.
 
         Your response "MUST" strictly adhere to the following JSON format:
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> ad550cb (Implement map_symptoms_to_specialties)
         Example (not to include ```json ```): {{
         "RECOMMENDED_SPECIALTY": ["specialty1", "specialty2", "specialty3"],
         "REASONING": "Explain why these specialties are recommended based on the patient's symptoms and conditions.",
@@ -48,6 +80,30 @@ class PromptGenerator:
         - RECOMMENDED_SPECIALTY: array of strings (up to 3 specialties from the provided list, in order of relevance)
         - REASONING: string (detailed but concise explanation of your recommendation, Pretend you are a medical advisor and provide a easy to understand explanation for this patient why these specialties are recommended in first person (maximum 30 words))
         - CONFIDENCE: string (must be one of: "High", "Medium", or "Low")
+<<<<<<< HEAD
+=======
+=======
+        Example: [
+        {{
+            "RECOMMENDED_SPECIALTY": "specialty1",
+            "REASONING": "Explain why these specialties are recommended based on the patient's symptoms and conditions.",
+            "CONFIDENCE": "One of 'High', 'Medium', or 'Low'"
+        }},
+        {{
+            "RECOMMENDED_SPECIALTY": "specialty2",
+            "REASONING": "Explain why these specialties are recommended based on the patient's symptoms and conditions.",
+            "CONFIDENCE": "One of 'High', 'Medium', or 'Low'"
+        }}
+        ]
+
+        - RECOMMENDED_SPECIALTY: string (up to 3 specialties from the provided list, in order of relevance)
+        - REASONING: string (detailed but concise explanation of your recommendation for each specialty, Pretend you are a medical advisor and provide a easy to understand explanation for this patient why these specialties are recommended in first person (maximum 30 words))
+        - CONFIDENCE: string (must be one of: "High", "Medium", or "Low")
+
+        The output must be an array of JSON objects, each containing the keys "RECOMMENDED_SPECIALTY", "REASONING", and "CONFIDENCE".
+        The length of the array should be up to 3.
+>>>>>>> 5b1c811 (Implement map_symptoms_to_specialties)
+>>>>>>> ad550cb (Implement map_symptoms_to_specialties)
         """
 
     def _format_specialties(self, specialties):
