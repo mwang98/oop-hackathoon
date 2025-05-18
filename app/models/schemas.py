@@ -1,41 +1,50 @@
 """
 Schema definitions for provider finder application.
 """
+
 from typing import List, Dict, Optional
 from pydantic import BaseModel, Field
 
 
 class Location(BaseModel):
     """Location information with latitude and longitude."""
+
     latitude: Optional[float] = None
     longitude: Optional[float] = None
 
 
 class Specialty(BaseModel):
     """Detailed specialty information."""
+
     id: Optional[str] = None
     specialty_name: Optional[str] = Field(None, alias="specialtyName")
     specialty_id: Optional[str] = Field(None, alias="specialtyId")
     description: Optional[str] = None
     exclude: Optional[bool] = False
     physician_specialty: Optional[Dict] = Field(None, alias="physicianSpecialty")
+
     class Config:
         extra = "allow"
 
 
 class BoardCertification(BaseModel):
     """Board certification information."""
+
     name: Optional[str] = None
     source: Optional[str] = None
 
 
 class BoardCertifications(BaseModel):
     """Collection of board certifications."""
-    board_certifications: Optional[List[BoardCertification]] = Field(None, alias="boardCertifications")
+
+    board_certifications: Optional[List[BoardCertification]] = Field(
+        None, alias="boardCertifications"
+    )
 
 
 class Physician(BaseModel):
     """Detailed physician information."""
+
     name: Optional[str] = None
     date_imported: Optional[str] = Field(None, alias="dateImported")
     hash: Optional[str] = None
@@ -57,11 +66,15 @@ class Physician(BaseModel):
     telehealth: Optional[bool] = Field(None, alias="telehealth")
     organization_name: Optional[str] = Field(None, alias="organizationName")
     group_practice_pac_id: Optional[str] = Field(None, alias="groupPracticePacId")
-    group_accepts_medicare_assignment: Optional[bool] = Field(None, alias="groupAcceptsMedicareAssignment")
+    group_accepts_medicare_assignment: Optional[bool] = Field(
+        None, alias="groupAcceptsMedicareAssignment"
+    )
     address_line2: Optional[str] = Field(None, alias="addressLine2")
     address_id: Optional[str] = Field(None, alias="addressId")
     address_line2_suppress: Optional[bool] = Field(None, alias="addressLine2suppress")
-    accepts_medicare_assignment: Optional[str] = Field(None, alias="acceptsMedicareAssignment")
+    accepts_medicare_assignment: Optional[str] = Field(
+        None, alias="acceptsMedicareAssignment"
+    )
     has_measures: Optional[bool] = Field(None, alias="hasMeasures")
     has_facility_measures: Optional[bool] = Field(None, alias="hasFacilityMeasures")
     has_updated_phone: Optional[bool] = Field(None, alias="hasUpdatedPhone")
@@ -70,12 +83,14 @@ class Physician(BaseModel):
     specialties: Optional[List[Specialty]] = None
     group_affiliations: Optional[List] = Field(None, alias="groupAffiliations")
     board_certifications: Optional[BoardCertifications] = None
+
     class Config:
         extra = "allow"
 
 
 class ProviderInfo(BaseModel):
     """Provider information."""
+
     distance: Optional[float] = None
     name: Optional[str] = None
     id: Optional[str] = None
@@ -89,17 +104,21 @@ class ProviderInfo(BaseModel):
     is_canonical_address: Optional[bool] = Field(None, alias="isCanonicalAddress")
     sort_name_alt: Optional[str] = Field(None, alias="sort_name")
     physician: Optional[Physician] = None
+
     class Config:
         extra = "allow"
 
+
 class ProviderConfirmationInfo(BaseModel):
     """Provider confirmation information after connecting."""
+
     is_in_network: bool
     available_timeslot: List[str]
     error: Optional[str] = None
+
     class Config:
         extra = "allow"
-        
+
 
 class ProviderRecommendations(BaseModel):
     provider_infos: Optional[List[ProviderInfo]] = None
@@ -109,18 +128,19 @@ class ProviderRecommendations(BaseModel):
     provider_confirmation_infos: Optional[List[ProviderConfirmationInfo]] = None
 
 
-
-
 class PatientInfo(BaseModel):
     """Patient information."""
+
     name: str
     date_of_birth: Optional[str] = Field(None, alias="dateOfBirth")
     policy_num: str = Field(..., alias="policyNum")
     insurance_company: str = Field(..., alias="insuranceCompany")
     date_time_range: str = Field(..., alias="dateTimeRange")
 
+
 class Request(BaseModel):
     """Request model for provider recommendations."""
+
     zip_code: int = Field(..., alias="zipCode")
     patient_info: PatientInfo = Field(..., alias="patientInfo")
     symptom_description: Optional[str] = Field(None, alias="symptomDescription")

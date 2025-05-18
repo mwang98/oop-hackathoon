@@ -157,7 +157,9 @@ async def recommend_providers(
         List of recommended providers
     """
     try:
-        logger.info(f"Finding providers for zip code: {zip_code} with radius: {radius} km")
+        logger.info(
+            f"Finding providers for zip code: {zip_code} with radius: {radius} km"
+        )
 
         # Get location from zip code
         location = await get_location_from_zip(zip_code)
@@ -169,21 +171,32 @@ async def recommend_providers(
 
         # Construct a list of (set(specialty), provider) tuples
         provider_specialty_list = [
-            (set(s.specialty_name for s in provider.physician.specialties), provider) for provider in providers
+            (set(s.specialty_name for s in provider.physician.specialties), provider)
+            for provider in providers
         ]
-        logger.info(f"Constructed provider specialty list with {len(provider_specialty_list)} entries.")
+        logger.info(
+            f"Constructed provider specialty list with {len(provider_specialty_list)} entries."
+        )
 
         provider_recommendations = []
         # If no symptoms provided, return all providers
         # If symptoms provided, filter by appropriate specialties
         if symptom_description:
-            logger.info(f"Start time for symptom mapping: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            logger.info(
+                f"Start time for symptom mapping: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            )
             result_list = await map_symptoms_to_specialties(symptom_description)
-            logger.info(f"End time for symptom mapping: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            logger.info(
+                f"End time for symptom mapping: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            )
 
             for specialty, reasoning, confidence in result_list:
-                selected_providers = _get_providers_by_specialty(specialty, provider_specialty_list)
-                selected_providers = _make_selected_provider_first('Matthew Sakumoto', selected_providers)
+                selected_providers = _get_providers_by_specialty(
+                    specialty, provider_specialty_list
+                )
+                selected_providers = _make_selected_provider_first(
+                    "Matthew Sakumoto", selected_providers
+                )
                 recommendation = ProviderRecommendations(
                     provider_infos=selected_providers,
                     reasoning=reasoning,
@@ -191,8 +204,12 @@ async def recommend_providers(
                     specialty=specialty,
                 )
                 provider_recommendations.append(recommendation)
-                logger.info(f"Recommended specialty: {specialty} with reasoning: {reasoning}, confidence: {confidence}")
-                logger.info(f"Found {len(selected_providers)} providers for specialty: {specialty}")
+                logger.info(
+                    f"Recommended specialty: {specialty} with reasoning: {reasoning}, confidence: {confidence}"
+                )
+                logger.info(
+                    f"Found {len(selected_providers)} providers for specialty: {specialty}"
+                )
     except Exception as e:
         logger.error(f"Error occurred while mapping symptoms to specialties: {e}")
         return DEFAULT_PROVIDER_RECOMMENDATIONS
@@ -201,8 +218,7 @@ async def recommend_providers(
 
 
 async def connect_providers(
-    selected_providers: List[ProviderInfo], 
-    patientInfo: PatientInfo
+    selected_providers: List[ProviderInfo], patientInfo: PatientInfo
 ) -> List[Tuple[ProviderInfo, ProviderConfirmationInfo]]:
     """
     Initiate connection with selected providers.
@@ -215,7 +231,7 @@ async def connect_providers(
     """
     # TODO: Implement provider connection logic
     # This might involve sending notifications to providers, creating records in a database, etc.
-    
+
     results = await asyncio.gather(
         *[
             connect_provider_worker(provider, patientInfo)
@@ -223,7 +239,6 @@ async def connect_providers(
         ]
     )
     return results
-
 
 
 async def connect_provider_worker(
@@ -275,6 +290,7 @@ def _get_providers_by_specialty(
         if specialty in specialty_set
     ]
 
+
 def _make_selected_provider_first(
     name: str,
     selected_providers: List[ProviderInfo],
@@ -284,8 +300,9 @@ def _make_selected_provider_first(
     """
     for i, provider in enumerate(selected_providers):
         if name.lower() in provider.name.lower():
-            return [provider] + selected_providers[:i] + selected_providers[i+1:]
+            return [provider] + selected_providers[:i] + selected_providers[i + 1 :]
     return selected_providers
+
 
 def parse_transcript(res: dict) -> str:
     transcript = ""
@@ -294,15 +311,16 @@ def parse_transcript(res: dict) -> str:
             transcript += f"{conversation['role']}: {conversation['text']}\n"
     return transcript
 
+
 def parse_json(raw_str: str) -> dict:
     # Regex to match JSON object within triple backticks
-    pattern = r'```(json)?[\n\s]*({.*?})[\n\s]*```'
-    
+    pattern = r"```(json)?[\n\s]*({.*?})[\n\s]*```"
+
     # Find the JSON object
     match = re.search(pattern, raw_str, re.DOTALL)
     if not match:
         return {"error": "No JSON object found in markdown"}
-    
+
     # Extract and parse the JSON string
     json_str = match.group(2)
     try:

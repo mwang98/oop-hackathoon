@@ -1,25 +1,26 @@
 import json
 
+
 class PromptGenerator:
     """Class for generating prompts for medical specialty matching"""
-    
+
     def __init__(self, specialties_file_path=None):
         """
         Initialize the PromptGenerator with the path to the specialties.json file.
-        
+
         Args:
             specialties_file_path (str, optional): Path to the specialties.json file.
                 If None, defaults to '../services/specialties.json'
         """
         self.specialties = self._get_specialty_list(specialties_file_path)
-        
+
     def create_specialty_matching_prompt(self, symptom_description):
         """
         Create a prompt for the LLM to match a patient description to a specialty
-        
+
         Args:
             symptom_description (str): Description of the patient's symptoms
-            
+
         Returns:
             str: A formatted prompt for the LLM
         """
@@ -73,10 +74,10 @@ class PromptGenerator:
     def _format_specialties(self, specialties):
         """
         Format the specialties list for the prompt
-        
+
         Args:
             specialties (list): List of specialty dictionaries
-            
+
         Returns:
             str: Formatted specialties text
         """
@@ -88,16 +89,19 @@ class PromptGenerator:
     def _get_specialty_list(self, specialties_file_path):
         """
         Load and return the list of specialties
-        
+
         Returns:
             list: List of specialty dictionaries
         """
         # Load specialties from the JSON file
-        with open(specialties_file_path, 'r') as f:
+        with open(specialties_file_path, "r") as f:
             specialties = json.load(f)
         # Extract relevant information for our prompt
-        specialties = [{
-            "specialtyName": specialty["specialtyName"],
-            "description": specialty["description"]
-        } for specialty in specialties]
+        specialties = [
+            {
+                "specialtyName": specialty["specialtyName"],
+                "description": specialty["description"],
+            }
+            for specialty in specialties
+        ]
         return specialties
