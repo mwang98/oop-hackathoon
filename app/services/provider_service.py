@@ -10,7 +10,12 @@ from app.models.schemas import (
     ProviderSpecialty,
     ProviderConfirmationInfo,
 )
+from app.utils.prompt import PromptGenerator
+from app.utils.llm_client import LLMClient, process_json_response
 import requests
+
+prompt_generator = PromptGenerator('../services/specialties.json')
+llm_client = LLMClient(api_key="your_api_key")
 
 
 async def get_location_from_zip(zip_code: str) -> Location:
@@ -74,9 +79,6 @@ async def get_providers_by_location(
         },
     )
     return convert_raw_response_to_provider_info(res.json())
-    # TODO: Implement provider search by location and radius
-    # This could query a database or external API
-    pass
 
 def convert_raw_response_to_provider_info(raw_response: dict) -> List[ProviderInfo]:
     """
@@ -84,20 +86,31 @@ def convert_raw_response_to_provider_info(raw_response: dict) -> List[ProviderIn
     """
     return [ProviderInfo(**provider) for provider in raw_response["providers"]]
 
-async def map_symptoms_to_specialties(symptoms: List[str]) -> List[ProviderSpecialty]:
+async def map_symptoms_to_specialties(patient_description: str) -> List[ProviderSpecialty]:
     """
     Map patient symptoms to relevant provider specialties.
 
     Args:
-        symptoms: List of patient symptoms
+        patient_description: The description of the patient's symptoms
 
     Returns:
         List of provider specialties that can address the symptoms
     """
-    # TODO: Implement symptom to specialty mapping
-    # This could use a predefined mapping, ML model, or external API
-    pass
-
+    prompt = prompt_generator.create_specialty_matching_prompt(patient_description)
+    response = llm_client.make_chat_completions_request(
+        model="27b-text-it",
+        messages=[
+            {"role": "system", "content": "You are a medical professional helping to match patients to the correct medical specialty based on their symptoms and conditions. Always respond with properly structured JSON as instructed."},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.3,  # Lower temperature for more focused/predictable responses
+        max_tokens=300,
+    )
+    processed_response = process_json_response(response)
+    rec_specialty = processed_response.get("RECOMMENDED_SPECIALTY", [])
+    rec_reasoning = processed_response.get("REASONING", "")
+    rec_confidence = processed_response.get("CONFIDENCE", "Low")
+    return rec_specialty, rec_reasoning, rec_confidence
 
 async def recommend_providers(
     zip_code: str, symptoms: Optional[List[str]] = None, radius: float = 25.0
