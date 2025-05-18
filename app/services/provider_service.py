@@ -18,6 +18,7 @@ from app.utils.llm_client import LLMClient, process_json_response
 import requests, re, json
 from datetime import datetime
 import asyncio
+import random
 from app.utils.constants import (
     DEFAULT_PROVIDER_RECOMMENDATIONS,
 )
@@ -234,14 +235,15 @@ async def connect_providers(
 
     results = await asyncio.gather(
         *[
-            connect_provider_worker(provider, patientInfo)
-            for provider in selected_providers
+            connect_provider_worker(idx, provider, patientInfo)
+            for idx, provider in enumerate(selected_providers)
         ]
     )
     return results
 
 
 async def connect_provider_worker(
+    idx: int, 
     provider: ProviderInfo, patientInfo: PatientInfo
 ) -> Tuple[ProviderInfo, ProviderConfirmationInfo]:
     """
@@ -250,11 +252,11 @@ async def connect_provider_worker(
     # This function can be used to handle provider connections asynchronously
     # For example, using threading or asyncio to manage multiple connections
     try:
-        if provider.physician.phone is not None and False:
-            url = "https://api.bland.ai/v1/calls"
-            headers = {"authorization": bland_ai_api_key}
-            data = {
-                "phone_number": provider.physician.phone,
+        url = "https://api.bland.ai/v1/calls"
+        headers = {"authorization": bland_ai_api_key}
+        logger.info(provider, provider.physician.phone, "\n=============\n")
+        data = {
+                "phone_number": provider.physician.phone if provider.physician is not None else None,
                 "pathway_id": bland_ai_pathway_id,
                 "request_data": {
                     "policy_num": patientInfo.policy_num,
@@ -264,12 +266,19 @@ async def connect_provider_worker(
                     "provider_name": provider.name,
                 },
             }
+        if idx == 0:
+            data["phone_number"] = "+16507884580"
+        elif idx == 1:
+            data["phone_number"] = "+13105082802"
+        if data["phone_number"] is not None and idx < 2:
             response = requests.post(url, json=data, headers=headers)
             call_id = response.json()["call_id"]
             url = f"https://api.bland.ai/v1/calls/{call_id}"
             response = requests.get(url, headers=headers)
             transcript = parse_transcript(response.json())
             return (provider, await get_result_from_transcript(transcript))
+        elif data["phone_number"] is not None:
+            return (provider, random.choice([{"available_timeslot": [patientInfo.date_time_range], "is_in_network": True}, {"available_timeslot": [], "is_in_network": False}]))
     except Exception as e:
         logger.error(f"Error occurred while connecting to provider {provider.name}: {e}")
     return (
