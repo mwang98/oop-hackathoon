@@ -2,20 +2,23 @@
 Provider finder service functions.
 """
 
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 import pgeocode
+import json
+import logging
 from app.models.schemas import (
     Location,
     ProviderInfo,
-    ProviderSpecialty,
     ProviderConfirmationInfo,
+    ProviderRecommendations
 )
 from app.utils.prompt import PromptGenerator
 from app.utils.llm_client import LLMClient, process_json_response
 import requests
 
-prompt_generator = PromptGenerator('../services/specialties.json')
-llm_client = LLMClient(api_key="your_api_key")
+prompt_generator = PromptGenerator('app/data/specialties.json')
+llm_client = LLMClient(api_key="api_key_here")  # Replace with your actual API key
+logger = logging.getLogger("provider_finder.service")
 
 
 async def get_location_from_zip(zip_code: str) -> Location:
@@ -61,6 +64,8 @@ async def get_providers_by_location(
     Returns:
         List of providers in the area
     """
+    logger.info(f"Searching for providers at coordinates: {location.latitude}, {location.longitude}, radius: {radius} km")
+    
     res = requests.post(
         "https://www.medicare.gov/api/care-compare/provider",
         json={
@@ -78,25 +83,27 @@ async def get_providers_by_location(
             "sort": ["closest"],
         },
     )
+    # Log response information more thoroughly
+    logger.info(f"API Response Status: {res.status_code}")
     return convert_raw_response_to_provider_info(res.json())
 
 def convert_raw_response_to_provider_info(raw_response: dict) -> List[ProviderInfo]:
     """
     Convert raw response to provider info.
     """
-    return [ProviderInfo(**provider) for provider in raw_response["providers"]]
+    return [ProviderInfo(**provider) for provider in raw_response["results"]]
 
-async def map_symptoms_to_specialties(patient_description: str) -> List[ProviderSpecialty]:
+async def map_symptoms_to_specialties(symptom_description: str) -> List[Tuple[str, str, str]]:
     """
     Map patient symptoms to relevant provider specialties.
 
     Args:
-        patient_description: The description of the patient's symptoms
+        symptom_description: The description of the patient's symptoms
 
     Returns:
         List of provider specialties that can address the symptoms
     """
-    prompt = prompt_generator.create_specialty_matching_prompt(patient_description)
+    prompt = prompt_generator.create_specialty_matching_prompt(symptom_description)
     response = llm_client.make_chat_completions_request(
         model="27b-text-it",
         messages=[
@@ -107,53 +114,58 @@ async def map_symptoms_to_specialties(patient_description: str) -> List[Provider
         max_tokens=300,
     )
     processed_response = process_json_response(response)
-    rec_specialty = processed_response.get("RECOMMENDED_SPECIALTY", [])
-    rec_reasoning = processed_response.get("REASONING", "")
-    rec_confidence = processed_response.get("CONFIDENCE", "Low")
-    return rec_specialty, rec_reasoning, rec_confidence
+    return [
+        (item.get("RECOMMENDED_SPECIALTY", ""), item.get("REASONING", ""), item.get("CONFIDENCE", "Low"))
+        for item in processed_response
+    ]
 
 async def recommend_providers(
-    zip_code: str, symptoms: Optional[List[str]] = None, radius: float = 25.0
-) -> List[ProviderInfo]:
+    zip_code: str, symptom_description: str, radius: float = 25.0
+) -> List[ProviderRecommendations]:
     """
     Recommend providers based on location and optionally symptoms.
 
     Args:
         zip_code: Patient's zip code
-        symptoms: List of patient symptoms (optional)
+        symptom_description: Description of patient's symptoms 
         radius: Search radius in kilometers
 
     Returns:
         List of recommended providers
     """
+    logger.info(f"Finding providers for zip code: {zip_code} with radius: {radius} km")
+
     # Get location from zip code
     location = await get_location_from_zip(zip_code)
+    logger.info(f"Location coordinates: {location.latitude}, {location.longitude}")
 
     # Get providers in the area
     providers = await get_providers_by_location(location, radius)
+    logger.info(f"Found {len(providers)} providers in the area.")
 
+    # Construct a list of (set(specialty), provider) tuples
+    provider_specialty_list = [
+        (set(s.specialty_name for s in provider.physician.specialties), provider) for provider in providers
+    ]
+
+    provider_recommendations = []
+    
     # If symptoms provided, filter by appropriate specialties
-    if symptoms:
-        relevant_specialties = await map_symptoms_to_specialties(symptoms)
-        # Filter providers by specialty
-        providers = [
-            provider
-            for provider in providers
-            if any(
-                specialty.id in [s.id for s in provider.specialties]
-                for specialty in relevant_specialties
+    if symptom_description:
+        result_list = await map_symptoms_to_specialties(symptom_description)
+
+        for specialty, reasoning, confidence in result_list:
+            selected_providers = _get_providers_by_specialty(specialty, provider_specialty_list)
+            recommendation = ProviderRecommendations(
+                provider_infos=selected_providers,
+                reasoning=reasoning,
+                confidence=confidence,
             )
-        ]
+            provider_recommendations.append(recommendation)
+            logger.info(f"Recommended specialty: {specialty} with reasoning: {reasoning}, confidence: {confidence}")
+            logger.info(f"Found {len(selected_providers)} providers for specialty: {specialty}")
 
-    # Calculate distance and sort by proximity
-    for provider in providers:
-        # TODO: Implement distance calculation
-        pass
-
-    providers.sort(key=lambda x: x.distance)
-
-    return providers
-
+    return provider_recommendations
 
 async def connect_providers(
     selected_providers: List[ProviderInfo],
@@ -186,3 +198,14 @@ async def connect_providers(
         confirmations.append(confirmation)
 
     return confirmations
+
+
+def _get_providers_by_specialty(
+        specialty: str,
+        provider_specialty_list: List[Tuple[set[str], ProviderInfo]],
+) -> List[ProviderInfo]:
+    return [
+        provider
+        for specialty_set, provider in provider_specialty_list
+        if specialty in specialty_set
+    ]
