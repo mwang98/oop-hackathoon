@@ -219,7 +219,7 @@ async def recommend_providers(
 
 
 async def connect_providers(
-    selected_providers: List[ProviderInfo], patientInfo: PatientInfo
+    idx: int, selected_providers: List[ProviderInfo], patientInfo: PatientInfo
 ) -> List[Tuple[ProviderInfo, ProviderConfirmationInfo]]:
     """
     Initiate connection with selected providers.
@@ -235,16 +235,15 @@ async def connect_providers(
 
     results = await asyncio.gather(
         *[
-            connect_provider_worker(idx, provider, patientInfo)
-            for idx, provider in enumerate(selected_providers)
+            connect_provider_worker(idx, inner_idx, provider, patientInfo)
+            for inner_idx, provider in enumerate(selected_providers)
         ]
     )
     return results
 
 
 async def connect_provider_worker(
-    idx: int, 
-    provider: ProviderInfo, patientInfo: PatientInfo
+    idx: int, inner_idx: int, provider: ProviderInfo, patientInfo: PatientInfo
 ) -> Tuple[ProviderInfo, ProviderConfirmationInfo]:
     """
     Worker function to handle provider connection in a separate thread.
@@ -254,22 +253,24 @@ async def connect_provider_worker(
     try:
         url = "https://api.bland.ai/v1/calls"
         headers = {"authorization": bland_ai_api_key}
-        logger.info(provider, provider.physician.phone, "\n=============\n")
         data = {
-                "phone_number": provider.physician.phone if provider.physician is not None else None,
-                "pathway_id": bland_ai_pathway_id,
-                "request_data": {
-                    "policy_num": patientInfo.policy_num,
-                    "insurance_company": patientInfo.insurance_company,
-                    "date_time_range": patientInfo.date_time_range,
-                    "name": patientInfo.name,
-                    "provider_name": provider.name,
-                },
-            }
-        if idx == 0:
+            "phone_number": (
+                provider.physician.phone if provider.physician is not None else None
+            ),
+            "pathway_id": bland_ai_pathway_id,
+            "request_data": {
+                "policy_num": patientInfo.policy_num,
+                "insurance_company": patientInfo.insurance_company,
+                "date_time_range": patientInfo.date_time_range,
+                "name": patientInfo.name,
+                "provider_name": provider.name,
+            },
+        }
+        if idx == 0 and inner_idx == 0:
             data["phone_number"] = "+16507884580"
-        elif idx == 1:
+        elif idx == 1 and inner_idx == 0:
             data["phone_number"] = "+13105082802"
+        logger.info(provider, data["phone_number"], "\n=============\n")
         if data["phone_number"] is not None and idx < 2:
             response = requests.post(url, json=data, headers=headers)
             call_id = response.json()["call_id"]
@@ -278,9 +279,28 @@ async def connect_provider_worker(
             transcript = parse_transcript(response.json())
             return (provider, await get_result_from_transcript(transcript))
         elif data["phone_number"] is not None:
-            return (provider, random.choice([{"available_timeslot": [patientInfo.date_time_range], "is_in_network": True}, {"available_timeslot": [], "is_in_network": False}]))
+            return (
+                provider,
+                random.choice(
+                    [
+                        ProviderConfirmationInfo(
+                            available_timeslot=[patientInfo.date_time_range],
+                            is_in_network=True,
+                        ),
+                        ProviderConfirmationInfo(
+                            available_timeslot=[],
+                            is_in_network=True,
+                        ),
+                        ProviderConfirmationInfo(
+                            available_timeslot=[], is_in_network=False
+                        ),
+                    ]
+                ),
+            )
     except Exception as e:
-        logger.error(f"Error occurred while connecting to provider {provider.name}: {e}")
+        logger.error(
+            f"Error occurred while connecting to provider {provider.name}: {e}"
+        )
     return (
         provider,
         ProviderConfirmationInfo(
