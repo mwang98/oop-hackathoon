@@ -1,0 +1,64 @@
+.App {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0;
+}
+
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  border-radius: 8px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-primary:hover {
+  background-color: #004494;
+  border-color: #004494;
+}
+
+/* Provider cards */
+.provider-card {
+  height: 100%;
+}
+
+/* Time slot styles */
+.list-group-item.action {
+  cursor: pointer;
+}
+
+.list-group-item.action:hover {
+  background-color: #f8f9fa;
+}
+
+/* Form styles */
+.form-control:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+}
