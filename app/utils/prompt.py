@@ -63,7 +63,7 @@ class PromptGenerator:
         ]
 
         - RECOMMENDED_SPECIALTY: string (up to 3 specialties from the provided list, in order of relevance)
-        - REASONING: string (detailed but concise explanation of your recommendation for each specialty, Pretend you are a medical advisor and provide a easy to understand explanation for this patient why these specialties are recommended in first person (maximum 30 words))
+        - REASONING: string (detailed but "concise" explanation of your recommendation for each specialty, Pretend you are a medical advisor and provide a easy to understand explanation for this patient why these specialties are recommended in first person (maximum 20 words))
         - CONFIDENCE: string (must be one of: "High", "Medium", or "Low")
 
         The output must be an array of JSON objects, each containing the keys "RECOMMENDED_SPECIALTY", "REASONING", and "CONFIDENCE".
