@@ -18,6 +18,9 @@ from app.utils.llm_client import LLMClient, process_json_response
 import requests, re, json
 from datetime import datetime
 import asyncio
+from app.utils.constants import (
+    DEFAULT_PROVIDER_RECOMMENDATIONS,
+)
 
 prompt_generator = PromptGenerator('app/data/specialties.json')
 llm_api_key = ""  # Replace with your actual API key
@@ -72,7 +75,6 @@ async def get_providers_by_location(
         List of providers in the area
     """
     logger.info(f"Searching for providers at coordinates: {location.latitude}, {location.longitude}, radius: {radius} km")
-    
     res = requests.post(
         "https://www.medicare.gov/api/care-compare/provider",
         json={
@@ -90,8 +92,6 @@ async def get_providers_by_location(
             "sort": ["closest"],
         },
     )
-    # Log response information more thoroughly
-    logger.info(f"API Response Status: {res.status_code}")
     return convert_raw_response_to_provider_info(res.json())
 
 
@@ -141,37 +141,45 @@ async def recommend_providers(
     Returns:
         List of recommended providers
     """
-    logger.info(f"Finding providers for zip code: {zip_code} with radius: {radius} km")
+    try:
+        logger.info(f"Finding providers for zip code: {zip_code} with radius: {radius} km")
 
-    # Get location from zip code
-    location = await get_location_from_zip(zip_code)
-    logger.info(f"Location coordinates: {location.latitude}, {location.longitude}")
+        # Get location from zip code
+        location = await get_location_from_zip(zip_code)
+        logger.info(f"Location coordinates: {location.latitude}, {location.longitude}")
 
-    # Get providers in the area
-    providers = await get_providers_by_location(location, radius)
-    logger.info(f"Found {len(providers)} providers in the area.")
+        # Get providers in the area
+        providers = await get_providers_by_location(location, radius)
+        logger.info(f"Found {len(providers)} providers in the area.")
 
-    # Construct a list of (set(specialty), provider) tuples
-    provider_specialty_list = [
-        (set(s.specialty_name for s in provider.physician.specialties), provider) for provider in providers
-    ]
+        # Construct a list of (set(specialty), provider) tuples
+        provider_specialty_list = [
+            (set(s.specialty_name for s in provider.physician.specialties), provider) for provider in providers
+        ]
 
-    provider_recommendations = []
-    
-    # If symptoms provided, filter by appropriate specialties
-    if symptom_description:
-        result_list = await map_symptoms_to_specialties(symptom_description)
+        provider_recommendations = []
+        # If no symptoms provided, return all providers
+        # If symptoms provided, filter by appropriate specialties
+        if symptom_description:
+            logger.info(f"Start time for symptom mapping: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            result_list = await map_symptoms_to_specialties(symptom_description)
+            logger.info(f"End time for symptom mapping: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-        for specialty, reasoning, confidence in result_list:
-            selected_providers = _get_providers_by_specialty(specialty, provider_specialty_list)
-            recommendation = ProviderRecommendations(
-                provider_infos=selected_providers,
-                reasoning=reasoning,
-                confidence=confidence,
-            )
-            provider_recommendations.append(recommendation)
-            logger.info(f"Recommended specialty: {specialty} with reasoning: {reasoning}, confidence: {confidence}")
-            logger.info(f"Found {len(selected_providers)} providers for specialty: {specialty}")
+            for specialty, reasoning, confidence in result_list:
+                selected_providers = _get_providers_by_specialty(specialty, provider_specialty_list)
+                selected_providers = _make_selected_provider_first('Matthew Sakumoto', selected_providers)
+                recommendation = ProviderRecommendations(
+                    provider_infos=selected_providers,
+                    reasoning=reasoning,
+                    confidence=confidence,
+                    specialty=specialty,
+                )
+                provider_recommendations.append(recommendation)
+                logger.info(f"Recommended specialty: {specialty} with reasoning: {reasoning}, confidence: {confidence}")
+                logger.info(f"Found {len(selected_providers)} providers for specialty: {specialty}")
+    except Exception as e:
+        logger.error(f"Error occurred while mapping symptoms to specialties: {e}")
+        return DEFAULT_PROVIDER_RECOMMENDATIONS
 
     return provider_recommendations
 
@@ -240,8 +248,18 @@ def _get_providers_by_specialty(
         for specialty_set, provider in provider_specialty_list
         if specialty in specialty_set
     ]
-    
 
+def _make_selected_provider_first(
+    name: str,
+    selected_providers: List[ProviderInfo],
+) -> List[ProviderInfo]:
+    """
+    Make the selected provider the first in the list.
+    """
+    for i, provider in enumerate(selected_providers):
+        if name.lower() in provider.name.lower():
+            return [provider] + selected_providers[:i] + selected_providers[i+1:]
+    return selected_providers
 
 def parse_transcript(res: dict) -> str:
     transcript = ""
