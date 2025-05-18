@@ -118,7 +118,6 @@ async def map_symptoms_to_specialties(
         List of provider specialties that can address the symptoms
     """
     prompt = prompt_generator.create_specialty_matching_prompt(symptom_description)
-    logger.info(f"Start mapping symptoms to specialties at {datetime.now()}")
     response = llm_client.make_chat_completions_request(
         model="27b-text-it",
         messages=[
@@ -197,6 +196,7 @@ async def recommend_providers(
                 selected_providers = _make_selected_provider_first(
                     "Matthew Sakumoto", selected_providers
                 )
+                selected_providers = selected_providers[:5]  # Limit to top 5 providers
                 recommendation = ProviderRecommendations(
                     provider_infos=selected_providers,
                     reasoning=reasoning,
@@ -249,27 +249,29 @@ async def connect_provider_worker(
     """
     # This function can be used to handle provider connections asynchronously
     # For example, using threading or asyncio to manage multiple connections
-    logger.info(provider, provider.physician.phone, "\n=============\n")
-    if provider.physician.phone is not None and False:
-        url = "https://api.bland.ai/v1/calls"
-        headers = {"authorization": bland_ai_api_key}
-        data = {
-            "phone_number": provider.physician.phone,
-            "pathway_id": bland_ai_pathway_id,
-            "request_data": {
-                "policy_num": patientInfo.policy_num,
-                "insurance_company": patientInfo.insurance_company,
-                "date_time_range": patientInfo.date_time_range,
-                "name": patientInfo.name,
-                "provider_name": provider.name,
-            },
-        }
-        response = requests.post(url, json=data, headers=headers)
-        call_id = response.json()["call_id"]
-        url = f"https://api.bland.ai/v1/calls/{call_id}"
-        response = requests.get(url, headers=headers)
-        transcript = parse_transcript(response.json())
-        return (provider, await get_result_from_transcript(transcript))
+    try:
+        if provider.physician.phone is not None and False:
+            url = "https://api.bland.ai/v1/calls"
+            headers = {"authorization": bland_ai_api_key}
+            data = {
+                "phone_number": provider.physician.phone,
+                "pathway_id": bland_ai_pathway_id,
+                "request_data": {
+                    "policy_num": patientInfo.policy_num,
+                    "insurance_company": patientInfo.insurance_company,
+                    "date_time_range": patientInfo.date_time_range,
+                    "name": patientInfo.name,
+                    "provider_name": provider.name,
+                },
+            }
+            response = requests.post(url, json=data, headers=headers)
+            call_id = response.json()["call_id"]
+            url = f"https://api.bland.ai/v1/calls/{call_id}"
+            response = requests.get(url, headers=headers)
+            transcript = parse_transcript(response.json())
+            return (provider, await get_result_from_transcript(transcript))
+    except Exception as e:
+        logger.error(f"Error occurred while connecting to provider {provider.name}: {e}")
     return (
         provider,
         ProviderConfirmationInfo(

@@ -21,7 +21,7 @@ router = APIRouter(
 )
 
 
-@router.get("/recommend", response_model=List[ProviderRecommendations])
+@router.post("/recommend", response_model=List[ProviderRecommendations])
 async def get_provider_recommendations(
     request: Request,
 ):
