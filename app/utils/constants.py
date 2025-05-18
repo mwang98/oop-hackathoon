@@ -17,6 +17,17 @@ DEFAULT_PROVIDER_RECOMMENDATIONS = [
                 last_name="Krishnan",
                 is_duplicate_address=False,
                 is_canonical_address=True,
+                physician={
+                    "name": "Nikhil Krishnan",
+                    "phone": "123-456-7890",
+                    "address": {
+                        "street": "Mission street",
+                        "city": "San Francisco",
+                        "state": "CA",
+                        "zip": "94103",
+                        "country": "USA",
+                    },
+                },
             )
         ],
         specialty="Internal Medicine",
@@ -36,6 +47,17 @@ DEFAULT_PROVIDER_RECOMMENDATIONS = [
                 last_name="Doe",
                 is_duplicate_address=False,
                 is_canonical_address=True,
+                physician={
+                    "name": "Jonathan Doe",
+                    "phone": "123-456-7890",
+                    "address": {
+                        "street": "Mission street",
+                        "city": "San Francisco",
+                        "state": "CA",
+                        "zip": "94103",
+                        "country": "USA",
+                    },
+                },
             )
         ],
         specialty="Internal Medicine",
