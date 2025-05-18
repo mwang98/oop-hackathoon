@@ -26,8 +26,6 @@ export const getProviderRecommendations = async (searchData) => {
     };
 
     const response = await api.post('/recommend', requestData);
-    console.log("Number of providers found:", response.data.length);
-    console.log("Provider recommendations:", response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching provider recommendations:', error);

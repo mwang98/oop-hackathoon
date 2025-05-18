@@ -54,8 +54,8 @@ const ProviderResults = () => {
                recommendation.provider_infos.map((provider, idx) => {
                 const confirmationInfo = recommendation.provider_confirmation_infos[idx];
                 
-                // // Skip providers without confirmation info or those not in network
-                // if (!confirmationInfo || !confirmationInfo.is_in_network) return null;
+                // Skip providers without confirmation info
+                if (!confirmationInfo) return null;
                 
                 return (
                   <Col key={provider.id || idx} md={6} lg={4} className="mb-3">
