@@ -266,18 +266,48 @@ async def connect_provider_worker(
                 "provider_name": provider.name,
             },
         }
-        if idx == 0 and inner_idx == 0:
+        if idx == 1 and inner_idx == 0:
             data["phone_number"] = "+16507884580"
-        elif idx == 1 and inner_idx == 0:
+        elif idx == 0 and inner_idx == 0:
             data["phone_number"] = "+13105082802"
-        logger.info(provider, data["phone_number"], "\n=============\n")
-        if data["phone_number"] is not None and idx < 2:
+        
+        if data["phone_number"] is not None and inner_idx == 0 and idx < 2:
             response = requests.post(url, json=data, headers=headers)
+            logger.info(f"Make call response: {response.status_code}")
             call_id = response.json()["call_id"]
+            logger.info(f"Call ID: {call_id}")
+            is_done = False
             url = f"https://api.bland.ai/v1/calls/{call_id}"
-            response = requests.get(url, headers=headers)
-            transcript = parse_transcript(response.json())
-            return (provider, await get_result_from_transcript(transcript))
+            cnt = 0
+            logger.info(f"Waiting for transcript for call ID: {call_id}")
+            await asyncio.sleep(3)
+            while(not is_done):
+                try:
+                    response = requests.get(url, headers=headers)
+                    logger.info(f"Cnt: {cnt}, Get transcript response: {response.status_code}")
+                    if response is None or "pathway_logs" not in response.json() or response.json()["pathway_logs"] == [] or response.json()["pathway_logs"] is None:
+                        cnt += 1
+                        await asyncio.sleep(3)
+                        if cnt >= 25:
+                            is_done = True
+                            return (provider, ProviderConfirmationInfo(
+                                is_in_network=False,
+                                available_timeslot=[],
+                            ))
+                    else:
+                        transcript = parse_transcript(response.json())
+                        is_done = True
+                        return (provider, await get_result_from_transcript(transcript))
+                except Exception as e:
+                    cnt += 1
+                    logger.error(f"Error occurred while fetching transcript: {e}")
+                    await asyncio.sleep(3)
+                    if cnt >= 25:
+                        is_done = True
+                        return (provider, ProviderConfirmationInfo(
+                            is_in_network=False,
+                            available_timeslot=[],
+                        ))
         elif data["phone_number"] is not None:
             return (
                 provider,
@@ -344,6 +374,7 @@ def parse_transcript(res: dict) -> str:
 
 
 def parse_json(raw_str: str) -> dict:
+    logger.info(f"Parsing JSON from raw string: {raw_str}")
     # Regex to match JSON object within triple backticks
     pattern = r"```(json)?[\n\s]*({.*?})[\n\s]*```"
 
@@ -389,9 +420,12 @@ async def get_result_from_transcript(transcript: str) -> ProviderConfirmationInf
         """,
             }
         ],
-        temperature=0.7,
-        max_tokens=200,
+        temperature=0.5,
+        max_tokens=100,
     )
+    obj = parse_json(res["choices"][0]["message"]["content"])
     return ProviderConfirmationInfo(
-        **parse_json(res["choices"][0]["message"]["content"])
-    )
+        is_in_network=obj.get("is_in_network", False),
+        available_timeslot=obj.get("available_timeslot", []),
+        )
+    
