@@ -56,7 +56,7 @@ async def get_location_from_zip(zip_code: str) -> Location:
         return Location(latitude=latitude, longitude=longitude)
     except Exception as e:
         # Handle errors (invalid zip code, service unavailable, etc.)
-        print(f"Error converting zip code to coordinates: {e}")
+        logger.error(f"Error converting zip code to coordinates: {e}")
         # Return a default location (or raise an exception depending on requirements)
         raise ValueError(f"Could not determine location for zip code: {zip_code}")
 
@@ -249,7 +249,7 @@ async def connect_provider_worker(
     """
     # This function can be used to handle provider connections asynchronously
     # For example, using threading or asyncio to manage multiple connections
-    print(provider, provider.physician.phone, "\n=============\n")
+    logger.info(provider, provider.physician.phone, "\n=============\n")
     if provider.physician.phone is not None and False:
         url = "https://api.bland.ai/v1/calls"
         headers = {"authorization": bland_ai_api_key}
