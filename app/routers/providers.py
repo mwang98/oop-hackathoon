@@ -39,7 +39,7 @@ async def get_provider_recommendations(
     provider_recommendations = await recommend_providers(
         request.zip_code, request.symptom_description, request.radius
     )
-    print(f"Provider recommendations: {provider_recommendations}")
+
     if not provider_recommendations:
         raise HTTPException(
             status_code=404,
