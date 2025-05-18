@@ -3,7 +3,7 @@ API routes for provider finder operations.
 """
 from fastapi import APIRouter, HTTPException, Query
 from typing import List, Optional
-from app.models.schemas import ProviderInfo, ProviderConfirmationInfo
+from app.models.schemas import ProviderInfo, ProviderConfirmationInfo, ProviderRecommendations
 from app.services.provider_service import recommend_providers, connect_providers
 
 router = APIRouter(
@@ -13,10 +13,10 @@ router = APIRouter(
 )
 
 
-@router.get("/recommend", response_model=List[ProviderInfo])
+@router.get("/recommend", response_model=List[ProviderRecommendations])
 async def get_provider_recommendations(
     zip_code: str,
-    symptoms: Optional[List[str]] = Query(None, description="List of patient symptoms"),
+    symptom_description: Optional[str] = Query(None, description="Patient's symptom description"),
     radius: Optional[float] = Query(25.0, description="Search radius in kilometers")
 ):
     """
@@ -24,13 +24,13 @@ async def get_provider_recommendations(
     
     Args:
         zip_code: Patient's zip code
-        symptoms: Optional list of symptoms
+        symptom_description: Description of patient's symptoms
         radius: Search radius in kilometers
         
     Returns:
         List of recommended providers
     """
-    providers = await recommend_providers(zip_code, symptoms, radius)
+    providers = await recommend_providers(zip_code, symptom_description, radius)
     if not providers:
         raise HTTPException(
             status_code=404,

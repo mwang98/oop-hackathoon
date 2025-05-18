@@ -19,6 +19,8 @@ class Specialty(BaseModel):
     description: Optional[str] = None
     exclude: bool = False
     physician_specialty: Optional[Dict] = Field(None, alias="physicianSpecialty")
+    class Config:
+        extra = "allow"
 
 
 class BoardCertification(BaseModel):
@@ -50,7 +52,6 @@ class Physician(BaseModel):
     middle_name: Optional[str] = Field(None, alias="middleName")
     suffix: Optional[str] = None
     gender: str
-    credential: str
     medical_school_name: str = Field(..., alias="medicalSchoolName")
     graduation_year: str = Field(..., alias="graduationYear")
     telehealth: bool
@@ -69,7 +70,7 @@ class Physician(BaseModel):
     is_canonical_address: bool = Field(..., alias="isCanonicalAddress")
     specialties: List[Specialty]
     group_affiliations: List = Field(..., alias="groupAffiliations")
-    board_certifications: BoardCertifications
+    board_certifications: Optional[BoardCertifications] = None
     class Config:
         extra = "allow"
 
@@ -92,6 +93,10 @@ class ProviderInfo(BaseModel):
     class Config:
         extra = "allow"
 
+class ProviderRecommendations(BaseModel):
+    provider_infos: List[ProviderInfo]
+    reasoning: str
+    confidence: str
 
 class ProviderConfirmationInfo(BaseModel):
     """Provider confirmation information after connecting."""
