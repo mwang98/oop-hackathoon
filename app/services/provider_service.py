@@ -22,7 +22,7 @@ from app.utils.constants import (
     DEFAULT_PROVIDER_RECOMMENDATIONS,
 )
 
-prompt_generator = PromptGenerator('app/data/specialties.json')
+prompt_generator = PromptGenerator("app/data/specialties.json")
 llm_api_key = ""  # Replace with your actual API key
 bland_ai_api_key = ""
 bland_ai_pathway_id = ""
@@ -74,7 +74,10 @@ async def get_providers_by_location(
     Returns:
         List of providers in the area
     """
-    logger.info(f"Searching for providers at coordinates: {location.latitude}, {location.longitude}, radius: {radius} km")
+    logger.info(
+        f"Searching for providers at coordinates: {location.latitude}, {location.longitude}, radius: {radius} km"
+    )
+
     res = requests.post(
         "https://www.medicare.gov/api/care-compare/provider",
         json={
@@ -101,7 +104,10 @@ def convert_raw_response_to_provider_info(raw_response: dict) -> List[ProviderIn
     """
     return [ProviderInfo(**provider) for provider in raw_response["results"]]
 
-async def map_symptoms_to_specialties(symptom_description: str) -> List[Tuple[str, str, str]]:
+
+async def map_symptoms_to_specialties(
+    symptom_description: str,
+) -> List[Tuple[str, str, str]]:
     """
     Map patient symptoms to relevant provider specialties.
 
@@ -112,10 +118,14 @@ async def map_symptoms_to_specialties(symptom_description: str) -> List[Tuple[st
         List of provider specialties that can address the symptoms
     """
     prompt = prompt_generator.create_specialty_matching_prompt(symptom_description)
+    logger.info(f"Start mapping symptoms to specialties at {datetime.now()}")
     response = llm_client.make_chat_completions_request(
         model="27b-text-it",
         messages=[
-            {"role": "system", "content": "You are a medical professional helping to match patients to the correct medical specialty based on their symptoms and conditions. Always respond with properly structured JSON as instructed."},
+            {
+                "role": "system",
+                "content": "You are a medical professional helping to match patients to the correct medical specialty based on their symptoms and conditions. Always respond with properly structured JSON as instructed.",
+            },
             {"role": "user", "content": prompt},
         ],
         temperature=0.3,  # Lower temperature for more focused/predictable responses
@@ -123,9 +133,14 @@ async def map_symptoms_to_specialties(symptom_description: str) -> List[Tuple[st
     )
     processed_response = process_json_response(response)
     return [
-        (item.get("RECOMMENDED_SPECIALTY", ""), item.get("REASONING", ""), item.get("CONFIDENCE", "Low"))
+        (
+            item.get("RECOMMENDED_SPECIALTY", ""),
+            item.get("REASONING", ""),
+            item.get("CONFIDENCE", "Low"),
+        )
         for item in processed_response
     ]
+
 
 async def recommend_providers(
     zip_code: str, symptom_description: str, radius: float = 25.0
@@ -135,7 +150,7 @@ async def recommend_providers(
 
     Args:
         zip_code: Patient's zip code
-        symptom_description: Description of patient's symptoms 
+        symptom_description: Description of patient's symptoms
         radius: Search radius in kilometers
 
     Returns:
@@ -156,6 +171,7 @@ async def recommend_providers(
         provider_specialty_list = [
             (set(s.specialty_name for s in provider.physician.specialties), provider) for provider in providers
         ]
+        logger.info(f"Constructed provider specialty list with {len(provider_specialty_list)} entries.")
 
         provider_recommendations = []
         # If no symptoms provided, return all providers
@@ -183,10 +199,11 @@ async def recommend_providers(
 
     return provider_recommendations
 
+
 async def connect_providers(
     selected_providers: List[ProviderInfo], 
     patientInfo: PatientInfo
-) -> List[ProviderConfirmationInfo]:
+) -> List[Tuple[ProviderInfo, ProviderConfirmationInfo]]:
     """
     Initiate connection with selected providers.
 
@@ -208,13 +225,17 @@ async def connect_providers(
     return results
 
 
-async def connect_provider_worker(provider: ProviderInfo, patientInfo: PatientInfo)->Tuple[ProviderInfo, dict]:
+
+async def connect_provider_worker(
+    provider: ProviderInfo, patientInfo: PatientInfo
+) -> Tuple[ProviderInfo, ProviderConfirmationInfo]:
     """
     Worker function to handle provider connection in a separate thread.
     """
     # This function can be used to handle provider connections asynchronously
     # For example, using threading or asyncio to manage multiple connections
-    if (provider.physician.phone is not None):
+    print(provider, provider.physician.phone, "\n=============\n")
+    if provider.physician.phone is not None and False:
         url = "https://api.bland.ai/v1/calls"
         headers = {"authorization": bland_ai_api_key}
         data = {
@@ -225,6 +246,7 @@ async def connect_provider_worker(provider: ProviderInfo, patientInfo: PatientIn
                 "insurance_company": patientInfo.insurance_company,
                 "date_time_range": patientInfo.date_time_range,
                 "name": patientInfo.name,
+                "provider_name": provider.name,
             },
         }
         response = requests.post(url, json=data, headers=headers)
@@ -233,15 +255,19 @@ async def connect_provider_worker(provider: ProviderInfo, patientInfo: PatientIn
         response = requests.get(url, headers=headers)
         transcript = parse_transcript(response.json())
         return (provider, await get_result_from_transcript(transcript))
-    return (provider, 
-        {
-            "error": "Provider does not have a phone number available for connection."
-        }
+    return (
+        provider,
+        ProviderConfirmationInfo(
+            is_in_network=False,
+            available_timeslot=[],
+            error="Provider does not have a phone number available for connection.",
+        ),
     )
 
+
 def _get_providers_by_specialty(
-        specialty: str,
-        provider_specialty_list: List[Tuple[set[str], ProviderInfo]],
+    specialty: str,
+    provider_specialty_list: List[Tuple[set[str], ProviderInfo]],
 ) -> List[ProviderInfo]:
     return [
         provider
@@ -288,7 +314,7 @@ def parse_json(raw_str: str) -> dict:
         return {"error": f"Missing key: {str(e)}"}
 
 
-async def get_result_from_transcript(transcript: str) -> dict:
+async def get_result_from_transcript(transcript: str) -> ProviderConfirmationInfo:
     res = llm_client.make_chat_completions_request(
         model="27b-text-it",
         messages=[
@@ -317,4 +343,6 @@ async def get_result_from_transcript(transcript: str) -> dict:
         temperature=0.7,
         max_tokens=200,
     )
-    return parse_json(res["choices"][0]["message"]["content"])
+    return ProviderConfirmationInfo(
+        **parse_json(res["choices"][0]["message"]["content"])
+    )

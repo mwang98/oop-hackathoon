@@ -92,28 +92,36 @@ class ProviderInfo(BaseModel):
     class Config:
         extra = "allow"
 
+class ProviderConfirmationInfo(BaseModel):
+    """Provider confirmation information after connecting."""
+    is_in_network: bool
+    available_timeslot: List[str]
+    error: Optional[str] = None
+    class Config:
+        extra = "allow"
+        
 
 class ProviderRecommendations(BaseModel):
     provider_infos: Optional[List[ProviderInfo]] = None
     specialty: Optional[str] = None
     reasoning: Optional[str] = None
     confidence: Optional[str] = None
+    provider_confirmation_infos: Optional[List[ProviderConfirmationInfo]] = None
 
 
-class ProviderConfirmationInfo(BaseModel):
-    """Provider confirmation information after connecting."""
-    provider_id: Optional[str] = None
-    provider_name: Optional[str] = None
-    confirmation_code: Optional[str] = None
-    status: Optional[str] = None
-    contact_info: Optional[Dict] = None
-    additional_info: Optional[Dict] = None
 
 
 class PatientInfo(BaseModel):
     """Patient information."""
-    name: Optional[str] = None
+    name: str
     date_of_birth: Optional[str] = Field(None, alias="dateOfBirth")
-    policy_num: Optional[str] = Field(None, alias="policyNum")
-    insurance_company: Optional[str] = Field(None, alias="insuranceCompany")
-    date_time_range: Optional[str] = Field(None, alias="dateTimeRange")
+    policy_num: str = Field(..., alias="policyNum")
+    insurance_company: str = Field(..., alias="insuranceCompany")
+    date_time_range: str = Field(..., alias="dateTimeRange")
+
+class Request(BaseModel):
+    """Request model for provider recommendations."""
+    zip_code: int = Field(..., alias="zipCode")
+    patient_info: PatientInfo = Field(..., alias="patientInfo")
+    symptom_description: Optional[str] = Field(None, alias="symptomDescription")
+    radius: Optional[float] = Field(25.0, alias="radius")
