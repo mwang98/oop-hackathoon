@@ -106,3 +106,12 @@ class ProviderConfirmationInfo(BaseModel):
     status: str
     contact_info: Dict
     additional_info: Optional[Dict] = None
+
+
+class PatientInfo(BaseModel):
+    """Patient information."""
+    name: str
+    date_of_birth: str = Field(..., alias="dateOfBirth")
+    policy_num: str = Field(..., alias="policyNum")
+    insurance_company: str = Field(..., alias="insuranceCompany")
+    date_time_range: str = Field(..., alias="dateTimeRange")
