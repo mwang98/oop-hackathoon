@@ -41,5 +41,5 @@ DEFAULT_PROVIDER_RECOMMENDATIONS = [
         specialty="Internal Medicine",
         reasoning="Based on your symptoms and location.",
         confidence="High",
-    )   
+    ),
 ]
